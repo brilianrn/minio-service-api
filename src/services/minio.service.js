@@ -9,7 +9,7 @@ const minioConfig = {
   secretKey: process.env.MINIO_SECRET_KEY,
 };
 
-const uploadFileToMinio = (file, data) => {
+const uploadFileToMinio = (file) => {
   try {
     const existDir = "./src/assets/files";
     if (!fs.existsSync(existDir)) {
@@ -38,7 +38,7 @@ const uploadFileToMinio = (file, data) => {
     };
     minioClient.fPutObject(
       process.env.MINIO_BUCKET_NAME,
-      `/${file.code}/${process.env.MINIO_SUB_BUCKET_2}/${name}/${name}${file.fileExtention}`,
+      `/${file.code}/${process.env.MINIO_SUB_BUCKET_2}/${name}${file.fileExtention}`,
       path,
       metaData,
       (err, res) => {
@@ -59,4 +59,28 @@ const uploadFileToMinio = (file, data) => {
   }
 };
 
-module.exports = { uploadFileToMinio };
+const findDataOnBucket = async ({ subbucket, id }) => {
+  try {
+    const minioClient = new Minio.Client(minioConfig);
+    const objectsList = await new Promise((resolve, reject) => {
+      const objectsListTemp = [];
+      const stream = minioClient.listObjectsV2(
+        process.env.MINIO_BUCKET_NAME,
+        `/${subbucket}/${process.env.MINIO_SUB_BUCKET_2}`,
+        true,
+        ""
+      );
+
+      stream.on("data", (obj) => objectsListTemp.push(obj.name));
+      stream.on("error", reject);
+      stream.on("end", () => {
+        resolve(objectsListTemp);
+      });
+    });
+    return { data: objectsList, error: null };
+  } catch (error) {
+    return { error, data: null };
+  }
+};
+
+module.exports = { uploadFileToMinio, findDataOnBucket };

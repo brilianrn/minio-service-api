@@ -44,4 +44,32 @@ const uploadFileValidator = async (req, res, next) => {
   }
 };
 
-module.exports = { uploadFileValidator };
+const findAllByCodeValidatior = async (req, res, next) => {
+  try {
+    const schema = Joi.object()
+      .keys({
+        subbucket: Joi.string().required(),
+        id: Joi.string(),
+      })
+      .options({ allowUnknown: true });
+    const result = schema.validate({ ...req.query });
+    if (isEmpty(result.error)) next();
+    else {
+      const error = result.error.message;
+      return res.status(400).json({
+        success: false,
+        message: error || "Please check your data again!",
+        data: null,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error!",
+      data: null,
+    });
+  }
+};
+
+module.exports = { uploadFileValidator, findAllByCodeValidatior };
