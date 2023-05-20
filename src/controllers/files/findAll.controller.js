@@ -3,7 +3,7 @@ const { findDataOnBucket } = require("../../services/minio.service");
 const findAllReportData = async (req, res) => {
   try {
     const { data, error } = await findDataOnBucket(req.query);
-    if (!data || error) {
+    if (!data || !data.length || error) {
       return res.status(404).json({
         success: false,
         message: "Data is not found",
