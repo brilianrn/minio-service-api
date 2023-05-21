@@ -62,11 +62,16 @@ const uploadFileToMinio = (file) => {
 const findDataOnBucket = async ({ subbucket, id }) => {
   try {
     const minioClient = new Minio.Client(minioConfig);
+    console.log(
+      `/${id}/${process.env.MINIO_SUB_BUCKET_2}${
+        subbucket ? `/${subbucket}` : ""
+      }`
+    );
     const objectsList = await new Promise((resolve, reject) => {
       const objectsListTemp = [];
       const stream = minioClient.listObjectsV2(
         process.env.MINIO_BUCKET_NAME,
-        `/${subbucket}/${process.env.MINIO_SUB_BUCKET_2}`,
+        `/${id}/${subbucket || process.env.MINIO_SUB_BUCKET_2}`,
         true,
         ""
       );

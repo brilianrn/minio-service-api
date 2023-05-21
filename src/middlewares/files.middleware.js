@@ -48,8 +48,8 @@ const findAllByCodeValidatior = async (req, res, next) => {
   try {
     const schema = Joi.object()
       .keys({
-        subbucket: Joi.string().required(),
-        id: Joi.string(),
+        subbucket: Joi.string(),
+        id: Joi.string().required(),
       })
       .options({ allowUnknown: true });
     const result = schema.validate({ ...req.query });
