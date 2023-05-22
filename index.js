@@ -11,8 +11,13 @@ const port = process.env.PORT || 7000;
 const router = require("./src/routes");
 
 app.use(cors());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(
+  express.urlencoded({
+    limit: `${process.env.MAX_FILE_SIZE || 50}mb`,
+    extended: true,
+  })
+);
+app.use(express.json({ limit: `${process.env.MAX_FILE_SIZE || 50}mb` }));
 app.use(helmet());
 app.use(morgan("tiny"));
 
