@@ -4,10 +4,10 @@
   "description": "minio service",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon index.js",
-    "staging": "cross-env NODE_ENV=staging node index.js",
-    "test": "cross-env NODE_ENV=test node index.js",
-    "start": "cross-env NODE_ENV=production node index.js"
+    "start": "cross-env NODE_ENV=production node index.js",
+    "start:dev": "cross-env NODE_ENV=development node index.js",
+    "start:sim": "cross-env NODE_ENV=sim node index.js",
+    "start:prod": "cross-env NODE_ENV=production node index.js"
   },
   "keywords": [],
   "author": "brilianrn",
